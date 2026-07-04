@@ -58,3 +58,9 @@ RUN echo 'cd /workspaces/Balloon-Receiver 2>/dev/null' >> /home/dev/.bashrc
 
 WORKDIR /workspaces/Balloon-Receiver
 USER dev
+
+# tmux — terminal multiplexer for SSH sessions
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends tmux \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+USER dev

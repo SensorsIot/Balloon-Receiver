@@ -39,7 +39,7 @@
         "-v", "/dev:/dev"
     ],
     "appPort": ["2634:2222"],
-    "postCreateCommand": "git config --global credential.helper store && git config --global core.sshCommand 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' && (git clone https://github.com/SensorsIot/claude.git ~/.claude 2>/dev/null || (cd ~/.claude && git pull)) && mkdir -p ~/.claude-data/projects && ln -sf ~/.claude-data/.credentials.json ~/.claude/.credentials.json && ln -sf ~/.claude-data/history.jsonl ~/.claude/history.jsonl && rm -rf ~/.claude/projects && ln -sf ~/.claude-data/projects ~/.claude/projects && ln -sf ~/.claude-data/.claude.json ~/.claude.json && npm install -g @anthropic-ai/claude-code && echo 'alias superclaude=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc && mkdir -p ~/.githooks && cp ~/.claude/githooks/pre-push ~/.githooks/pre-push && chmod +x ~/.githooks/pre-push && git config --global core.hooksPath ~/.githooks && . /opt/esp-idf/export.sh",
+    "postCreateCommand": "git config --global credential.helper store && git config --global core.sshCommand 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' && (git clone https://github.com/SensorsIot/claude.git ~/.claude 2>/dev/null || (cd ~/.claude && git pull)) && cp -f ~/.claude/tmux.conf ~/.tmux.conf && mkdir -p ~/.claude-data/projects && ln -sf ~/.claude-data/.credentials.json ~/.claude/.credentials.json && ln -sf ~/.claude-data/history.jsonl ~/.claude/history.jsonl && rm -rf ~/.claude/projects && ln -sf ~/.claude-data/projects ~/.claude/projects && ln -sf ~/.claude-data/.claude.json ~/.claude.json && npm install -g @anthropic-ai/claude-code && echo 'alias superclaude=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc && mkdir -p ~/.githooks && cp ~/.claude/githooks/pre-push ~/.githooks/pre-push && chmod +x ~/.githooks/pre-push && git config --global core.hooksPath ~/.githooks && . /opt/esp-idf/export.sh",
     "remoteUser": "dev",
     "containerEnv": {
         "IDF_PATH": "/opt/esp-idf",
@@ -59,7 +59,6 @@
         "source=${localEnv:HOME}/.ssh/authorized_keys,target=/home/dev/.ssh/authorized_keys,type=bind,readonly",
         "source=${localEnv:HOME}/.ssh/id_ed25519,target=/home/dev/.ssh/id_ed25519,type=bind,readonly",
         "source=${localEnv:HOME}/.git-credentials,target=/home/dev/.git-credentials,type=bind,readonly",
-        "source=${localWorkspaceFolder}/.claude-data,target=/home/dev/.claude-data,type=bind",
-        "source=${localEnv:HOME}/.claude-containers/Balloon-Receiver,target=/home/dev/.claude,type=bind"
+        "source=${localWorkspaceFolder}/.claude-data,target=/home/dev/.claude-data,type=bind"
     ]
 }
