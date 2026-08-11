@@ -40,13 +40,14 @@
     ],
     "appPort": ["2634:2222"],
     "postCreateCommand": "(grep -q /run/secrets/env ~/.bashrc || { sed -i '/Persistent claude session/i [ -r /run/secrets/env ] && . /run/secrets/env' ~/.bashrc; grep -q /run/secrets/env ~/.bashrc || echo '[ -r /run/secrets/env ] && . /run/secrets/env' >> ~/.bashrc; }) && git config --global credential.helper /usr/local/bin/git-cred-from-secrets && git config --global core.sshCommand 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' && (git clone https://github.com/SensorsIot/claude.git ~/.claude 2>/dev/null || git -C ~/.claude pull --ff-only || echo 'WARNING: ~/.claude not updated (local changes or divergence) - continuing') && cp -f ~/.claude/tmux.conf ~/.tmux.conf && mkdir -p ~/.claude-data/projects && ln -sf ~/.claude-data/.credentials.json ~/.claude/.credentials.json && ln -sf ~/.claude-data/history.jsonl ~/.claude/history.jsonl && rm -rf ~/.claude/projects && ln -sf ~/.claude-data/projects ~/.claude/projects && ln -sf ~/.claude-data/.claude.json ~/.claude.json && mkdir -p ~/.npm-global && npm config set prefix ~/.npm-global && npm install -g @anthropic-ai/claude-code && echo 'alias superclaude=\"claude --dangerously-skip-permissions\"' >> ~/.bashrc && mkdir -p ~/.githooks && cp ~/.claude/githooks/pre-push ~/.githooks/pre-push && chmod +x ~/.githooks/pre-push && git config --global core.hooksPath ~/.githooks && . /opt/esp-idf/export.sh",
-    "postStartCommand": "sudo sh -c 'mkdir -p /home/dev/.claude-data/hostkeys && if ls /home/dev/.claude-data/hostkeys/ssh_host_*_key >/dev/null 2>&1; then cp -a /home/dev/.claude-data/hostkeys/ssh_host_* /etc/ssh/; else cp -a /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub /home/dev/.claude-data/hostkeys/; fi && chmod 600 /etc/ssh/ssh_host_*_key && chmod 644 /etc/ssh/ssh_host_*_key.pub && /etc/init.d/ssh restart'",
+    "postStartCommand": "sudo sh -c 'mkdir -p /home/dev/.claude-data/hostkeys && if ls /home/dev/.claude-data/hostkeys/ssh_host_*_key >/dev/null 2>&1; then cp -a /home/dev/.claude-data/hostkeys/ssh_host_* /etc/ssh/; else cp -a /etc/ssh/ssh_host_*_key /etc/ssh/ssh_host_*_key.pub /home/dev/.claude-data/hostkeys/; fi && chmod 600 /etc/ssh/ssh_host_*_key && chmod 644 /etc/ssh/ssh_host_*_key.pub && /etc/init.d/ssh restart' ; ls /home/dev/.harness-skills/*/ >/dev/null 2>&1 && { mkdir -p ${containerWorkspaceFolder}/.claude; rm -rf ${containerWorkspaceFolder}/.claude/skills; ln -sfn /home/dev/.harness-skills ${containerWorkspaceFolder}/.claude/skills; }",
     "remoteUser": "dev",
     "containerEnv": {
         "IDF_PATH": "/opt/esp-idf",
         "IDF_TOOLS_PATH": "/opt/esp-idf-tools"
     },
     "mounts": [
+        "source=${localEnv:HOME}/Universal-Embedded-Workbench/.claude/skills,target=/home/dev/.harness-skills,type=bind,readonly",
         "source=${localEnv:HOME}/.secrets/env,target=/run/secrets/env,type=bind,readonly",
         "source=${localEnv:HOME}/.local/bin/git-cred-from-secrets,target=/usr/local/bin/git-cred-from-secrets,type=bind,readonly",
         "source=${localEnv:HOME}/.ssh/authorized_keys,target=/home/dev/.ssh/authorized_keys,type=bind,readonly",

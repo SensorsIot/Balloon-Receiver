@@ -15,7 +15,7 @@ __pycache__/
 
 # Claude runtime state inside workspace .claude/
 .claude/*
-!.claude/skills/
+# skills/ now symlinks to the Embedded-AI-Harness bind mount, not repo content
 !.claude/commands/
 
 # Claude data persistence (credentials, sessions, history)
